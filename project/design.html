@@ -482,6 +482,106 @@
         .dark-theme .size-value {
             color: #fff;
         }
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        .pattern-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .pattern-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .pattern-item.active {
+            border-color: #00bcd4;
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.3);
+        }
+        .pattern-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .dress-preview {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .dress-preview img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .pattern-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            mix-blend-mode: multiply;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            background-size: 100px 100px;
+            background-repeat: repeat;
+            pointer-events: none;
+        }
+        .floral-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50,20 C60,20 70,30 70,40 C70,50 60,60 50,60 C40,60 30,50 30,40 C30,30 40,20 50,20' fill='%2300bcd4'/%3E%3Cpath d='M50,40 C55,40 60,45 60,50 C60,55 55,60 50,60 C45,60 40,55 40,50 C40,45 45,40 50,40' fill='%23ff69b4'/%3E%3C/svg%3E");
+        }
+        .stripes-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='0' width='20' height='100' fill='%2300bcd4'/%3E%3C/svg%3E");
+        }
+        .dots-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='10' fill='%2300bcd4'/%3E%3C/svg%3E");
+        }
+        .geometric-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='25' y='25' width='50' height='50' fill='%2300bcd4'/%3E%3C/svg%3E");
+        }
+        .pattern-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            margin: 0 20px;
+        }
+        .pattern-scale {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .pattern-scale label {
+            min-width: 100px;
+        }
+        .pattern-scale input {
+            flex: 1;
+        }
+        .pattern-rotation {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -523,6 +623,7 @@
                     <button class="tool-btn active" onclick="setTool('draw')">Draw</button>
                     <button class="tool-btn" onclick="setTool('fill')">Fill</button>
                     <button class="tool-btn" onclick="setTool('eraser')">Eraser</button>
+                    <button class="tool-btn" onclick="setTool('colorFill')">Color Fill</button>
                     <div class="size-control">
                         <label>Size:</label>
                         <input type="range" min="1" max="50" value="5" onchange="updateSize(this.value)" class="size-slider">
@@ -584,7 +685,7 @@
         <a href="design.html" class="footer-item active"><i class="fas fa-pencil-ruler"></i><span>Design</span></a>
         <a href="measurements.html" class="footer-item"><i class="fas fa-ruler"></i><span>Measurements</span></a>
         <a href="tailors.html" class="footer-item"><i class="fas fa-user-tie"></i><span>Tailors</span></a>
-        <a href="orders.html" class="footer-item"><i class="fas fa-shopping-cart"></i><span>Orders</span></a>
+        <a href="orders.html" class="footer-item"><i class="fas fa-shopping-cart"></i><span>cart</span></a>
         <a href="accounts.html" class="footer-item"><i class="fas fa-user"></i><span>Profile</span></a>
     </nav>
 
@@ -595,6 +696,11 @@
             <button onclick="importImage()" style="padding: 8px 15px; background: #00bcd4; color: white; border: none; border-radius: 5px; cursor: pointer;">Import</button>
             <button onclick="closeImageImportDialog()" style="padding: 8px 15px; background: #ff4444; color: white; border: none; border-radius: 5px; cursor: pointer;">Cancel</button>
         </div>
+    </div>
+
+   
+    <div class="pattern-grid">
+        <!-- Patterns will be loaded dynamically -->
     </div>
 
     <script>
@@ -609,6 +715,10 @@
         let currentFabric = 'silk';
         let currentStyle = 'traditional';
 
+        // Add these new functions for pattern handling
+        let selectedPattern = null;
+        let selectedDress = null;
+
         // Initialize canvas
         window.onload = function() {
             initCanvas();
@@ -617,6 +727,7 @@
             setupPatternListeners();
             setupFabricListeners();
             setupStyleListeners();
+            loadPatterns();
         };
 
         function initCanvas() {
@@ -680,6 +791,9 @@
                     patterns.forEach(p => p.classList.remove('active'));
                     pattern.classList.add('active');
                     currentPattern = pattern.textContent.toLowerCase();
+                    
+                    // Update the drawing tool to use the selected pattern
+                    setTool('draw');
                 });
             });
         }
@@ -806,6 +920,9 @@
             if (currentTool === 'fill') {
                 floodFill(e.offsetX, e.offsetY);
                 return;
+            } else if (currentTool === 'colorFill') {
+                colorFill(e.offsetX, e.offsetY);
+                return;
             }
             isDrawing = true;
             [lastX, lastY] = [e.offsetX, e.offsetY];
@@ -826,12 +943,13 @@
                 ctx.lineWidth = currentSize * 2;
                 ctx.stroke();
             } else if (currentPattern !== 'solid') {
-                ctx.strokeStyle = currentColor;
+                // Create and apply pattern
+                const pattern = createPattern(ctx, currentPattern);
+                ctx.strokeStyle = pattern;
                 ctx.lineWidth = currentSize;
                 ctx.stroke();
                 
-                // Apply pattern
-                const pattern = createPattern(ctx, currentPattern);
+                // Fill the area with pattern
                 ctx.fillStyle = pattern;
                 ctx.fillRect(lastX - currentSize/2, lastY - currentSize/2, 
                            e.offsetX - lastX + currentSize, 
@@ -847,36 +965,71 @@
 
         function createPattern(ctx, patternType) {
             const patternCanvas = document.createElement('canvas');
-            patternCanvas.width = 20;
-            patternCanvas.height = 20;
+            patternCanvas.width = 50;
+            patternCanvas.height = 50;
             const patternCtx = patternCanvas.getContext('2d');
             
             patternCtx.fillStyle = currentColor;
             
             switch(patternType) {
                 case 'floral':
+                    // Draw smooth flower petals
                     patternCtx.beginPath();
-                    patternCtx.arc(10, 10, 3, 0, Math.PI * 2);
+                    for (let i = 0; i < 5; i++) {
+                        const angle = (i * 72 * Math.PI) / 180;
+                        const x1 = 25 + Math.cos(angle) * 15;
+                        const y1 = 25 + Math.sin(angle) * 15;
+                        const x2 = 25 + Math.cos(angle + 0.5) * 12;
+                        const y2 = 25 + Math.sin(angle + 0.5) * 12;
+                        const x3 = 25 + Math.cos(angle + 1) * 15;
+                        const y3 = 25 + Math.sin(angle + 1) * 15;
+                        
+                        patternCtx.moveTo(25, 25);
+                        patternCtx.bezierCurveTo(x1, y1, x2, y2, x3, y3);
+                        patternCtx.bezierCurveTo(x3, y3, x2, y2, 25, 25);
+                    }
+                    patternCtx.fill();
+                    
+                    // Draw smooth flower center
+                    patternCtx.beginPath();
+                    patternCtx.arc(25, 25, 8, 0, Math.PI * 2);
+                    patternCtx.fillStyle = '#ff69b4';
+                    patternCtx.fill();
+                    
+                    // Add some detail to the center
+                    patternCtx.beginPath();
+                    patternCtx.arc(25, 25, 4, 0, Math.PI * 2);
+                    patternCtx.fillStyle = '#ff1493';
                     patternCtx.fill();
                     break;
-                case 'geometric':
-                    patternCtx.fillRect(5, 5, 10, 10);
-                    break;
+                    
                 case 'stripes':
-                    patternCtx.fillRect(0, 0, 5, 20);
+                    // Draw vertical stripes
+                    for (let i = 0; i < 50; i += 10) {
+                        patternCtx.fillRect(i, 0, 5, 50);
+                    }
                     break;
+                    
                 case 'dots':
+                    // Draw polka dots
                     patternCtx.beginPath();
-                    patternCtx.arc(10, 10, 2, 0, Math.PI * 2);
+                    patternCtx.arc(25, 25, 5, 0, Math.PI * 2);
                     patternCtx.fill();
                     break;
+                    
+                case 'geometric':
+                    // Draw geometric shapes
+                    patternCtx.fillRect(10, 10, 30, 30);
+                    break;
+                    
                 case 'embroidered':
+                    // Draw embroidered pattern
                     patternCtx.beginPath();
-                    patternCtx.arc(10, 10, 3, 0, Math.PI * 2);
-                    patternCtx.fill();
-                    patternCtx.beginPath();
-                    patternCtx.arc(10, 10, 1, 0, Math.PI * 2);
-                    patternCtx.fillStyle = '#fff';
+                    patternCtx.moveTo(10, 25);
+                    patternCtx.lineTo(25, 10);
+                    patternCtx.lineTo(40, 25);
+                    patternCtx.lineTo(25, 40);
+                    patternCtx.closePath();
                     patternCtx.fill();
                     break;
             }
@@ -1052,12 +1205,15 @@
         }
 
         function hexToRgb(hex) {
-            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return result ? {
-                r: parseInt(result[1], 16),
-                g: parseInt(result[2], 16),
-                b: parseInt(result[3], 16)
-            } : null;
+            // Remove the # if present
+            hex = hex.replace('#', '');
+            
+            // Parse the hex values
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+            
+            return { r, g, b };
         }
 
         // Save design functionality
@@ -1081,6 +1237,150 @@
             const canvas = document.getElementById('designCanvas');
             const ctx = canvas.getContext('2d');
             ctx.lineWidth = currentSize;
+        }
+
+        function loadPatterns() {
+            const patternGrid = document.querySelector('.pattern-grid');
+            patternGrid.innerHTML = patterns.map(pattern => `
+                <div class="pattern-item" onclick="selectPattern(${pattern.id})">
+                    <img src="${pattern.image}" alt="${pattern.name}">
+                </div>
+            `).join('');
+        }
+
+        function selectPattern(patternId) {
+            // Remove active class from all pattern items
+            document.querySelectorAll('.pattern-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Add active class to selected pattern
+            const selectedItem = document.querySelector(`.pattern-item:nth-child(${patternId})`);
+            selectedItem.classList.add('active');
+
+            // Update selected pattern
+            selectedPattern = patterns.find(p => p.id === patternId);
+
+            // Apply pattern to dress preview
+            applyPatternToDress();
+        }
+
+        function selectDress(dressType) {
+            selectedDress = dressType;
+            const dressPreview = document.querySelector('.dress-preview img');
+            dressPreview.src = `images/dresses/${dressType}.jpg`;
+
+            // Apply pattern if one is selected
+            if (selectedPattern) {
+                applyPatternToDress();
+            }
+        }
+
+        function applyPatternToDress() {
+            const dressPreview = document.querySelector('.dress-preview');
+            let patternOverlay = document.querySelector('.pattern-overlay');
+            
+            if (!patternOverlay) {
+                patternOverlay = document.createElement('div');
+                patternOverlay.className = 'pattern-overlay';
+                dressPreview.appendChild(patternOverlay);
+            }
+
+            // Remove all pattern classes
+            patternOverlay.className = 'pattern-overlay';
+            
+            // Add the specific pattern class
+            switch(selectedPattern.name.toLowerCase()) {
+                case 'floral':
+                    patternOverlay.classList.add('floral-pattern');
+                    break;
+                case 'stripes':
+                    patternOverlay.classList.add('stripes-pattern');
+                    break;
+                case 'polka dots':
+                    patternOverlay.classList.add('dots-pattern');
+                    break;
+                case 'geometric':
+                    patternOverlay.classList.add('geometric-pattern');
+                    break;
+            }
+
+            // Apply current pattern settings
+            patternOverlay.style.opacity = '0.7';
+            patternOverlay.style.transform = `scale(1) rotate(0deg)`;
+        }
+
+        function adjustPatternScale(value) {
+            const overlay = document.querySelector('.pattern-overlay');
+            if (overlay) {
+                const currentTransform = overlay.style.transform;
+                const currentRotation = currentTransform.match(/rotate\((\d+)deg\)/);
+                const rotation = currentRotation ? currentRotation[1] : '0';
+                overlay.style.transform = `scale(${value}) rotate(${rotation}deg)`;
+            }
+        }
+
+        function rotatePattern(direction) {
+            const overlay = document.querySelector('.pattern-overlay');
+            if (overlay) {
+                const currentTransform = overlay.style.transform;
+                const currentScale = currentTransform.match(/scale\(([\d.]+)\)/);
+                const currentRotation = currentTransform.match(/rotate\((\d+)deg\)/);
+                const scale = currentScale ? currentScale[1] : '1';
+                const currentDeg = currentRotation ? parseInt(currentRotation[1]) : 0;
+                const newDeg = direction === 'left' ? currentDeg - 15 : currentDeg + 15;
+                overlay.style.transform = `scale(${scale}) rotate(${newDeg}deg)`;
+            }
+        }
+
+        function colorFill(startX, startY) {
+            const canvas = document.getElementById('designCanvas');
+            const ctx = canvas.getContext('2d');
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const pixels = imageData.data;
+            
+            // Get the color at the clicked point
+            const startPos = (startY * canvas.width + startX) * 4;
+            const startR = pixels[startPos];
+            const startG = pixels[startPos + 1];
+            const startB = pixels[startPos + 2];
+            
+            // Convert current color to RGB
+            const fillColor = hexToRgb(currentColor);
+            
+            // Create a stack for the flood fill algorithm
+            const stack = [[startX, startY]];
+            const visited = new Set();
+            
+            while (stack.length > 0) {
+                const [x, y] = stack.pop();
+                const pos = (y * canvas.width + x) * 4;
+                const key = `${x},${y}`;
+                
+                // Check if the pixel is within bounds and matches the target color
+                if (x < 0 || x >= canvas.width || y < 0 || y >= canvas.height) continue;
+                if (visited.has(key)) continue;
+                
+                // Check if the pixel is white or transparent
+                const isWhite = pixels[pos] === 255 && pixels[pos + 1] === 255 && pixels[pos + 2] === 255;
+                const isTransparent = pixels[pos + 3] === 0;
+                
+                if (!isWhite && !isTransparent) continue;
+                
+                visited.add(key);
+                
+                // Set the new color
+                pixels[pos] = fillColor.r;
+                pixels[pos + 1] = fillColor.g;
+                pixels[pos + 2] = fillColor.b;
+                pixels[pos + 3] = 255; // Set alpha to fully opaque
+                
+                // Add neighboring pixels to the stack
+                stack.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]);
+            }
+            
+            // Update the canvas with the new image data
+            ctx.putImageData(imageData, 0, 0);
         }
     </script>
 </body>
